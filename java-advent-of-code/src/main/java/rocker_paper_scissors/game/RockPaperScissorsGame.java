@@ -4,10 +4,6 @@ import java.util.List;
 
 public class RockPaperScissorsGame {
 
-    public static final int win = 6;
-    public static final int draw = 3;
-    public static final int lose = 0;
-
     private List<RockPaperScissorRound> rounds;
 
     public RockPaperScissorsGame(List<RockPaperScissorRound> rounds) {
@@ -19,7 +15,21 @@ public class RockPaperScissorsGame {
     }
 
     private int calculateRoundScore(RockPaperScissorRound round) {
-        return round.myHand().scoreAgainst(round.theirHand()) + round.myHand().getValue();
+        return round.myHand().scoreByChallenger(round.theirHand()).getScore() + round.myHand().getValue();
+    }
+
+    public enum RoundScore {
+        Win(6), Lose(0), Draw(3);
+
+        final int score;
+
+        RoundScore(int score) {
+            this.score = score;
+        }
+
+        public int getScore() {
+            return score;
+        }
     }
 
 }

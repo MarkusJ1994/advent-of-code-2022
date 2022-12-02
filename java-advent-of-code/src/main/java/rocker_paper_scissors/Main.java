@@ -2,6 +2,7 @@ package rocker_paper_scissors;
 
 import rocker_paper_scissors.game.RockPaperScissorRound;
 import rocker_paper_scissors.game.RockPaperScissorsGame;
+import rocker_paper_scissors.game.RockPaperScissorsGame.RoundScore;
 import rocker_paper_scissors.types.Paper;
 import rocker_paper_scissors.types.Rock;
 import rocker_paper_scissors.types.RockPaperScissorType;
@@ -59,9 +60,9 @@ public class Main {
     private static RockPaperScissorType inputToDerivedOption(RockPaperScissorType theirHand, String inputResult) {
         //Reversed win/lose since we have theirr hand and want to calculate our results
         return switch (inputResult) {
-            case "X" -> theirHand.deriveChallengerForDesiredScore(RockPaperScissorsGame.win);
-            case "Y" -> theirHand.deriveChallengerForDesiredScore(RockPaperScissorsGame.draw);
-            case "Z" -> theirHand.deriveChallengerForDesiredScore(RockPaperScissorsGame.lose);
+            case "X" -> theirHand.challengerByScore(RoundScore.Win);
+            case "Y" -> theirHand.challengerByScore(RoundScore.Draw);
+            case "Z" -> theirHand.challengerByScore(RoundScore.Lose);
             default -> throw new IllegalArgumentException("None matching");
         };
     }

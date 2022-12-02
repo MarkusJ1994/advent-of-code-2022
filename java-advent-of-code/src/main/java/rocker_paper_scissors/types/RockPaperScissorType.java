@@ -1,10 +1,12 @@
 package rocker_paper_scissors.types;
 
+import rocker_paper_scissors.game.RockPaperScissorsGame.RoundScore;
+
 public interface RockPaperScissorType {
 
     int getValue();
 
-    int scoreAgainst(RockPaperScissorType challenger);
+    RoundScore scoreByChallenger(RockPaperScissorType challenger);
 
-    RockPaperScissorType deriveChallengerForDesiredScore(int desiredScore);
+    RockPaperScissorType challengerByScore(RoundScore desiredScore);
 }

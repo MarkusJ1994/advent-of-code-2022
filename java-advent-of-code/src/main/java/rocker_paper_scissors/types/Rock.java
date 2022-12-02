@@ -1,6 +1,6 @@
 package rocker_paper_scissors.types;
 
-import rocker_paper_scissors.game.RockPaperScissorsGame;
+import rocker_paper_scissors.game.RockPaperScissorsGame.RoundScore;
 
 public class Rock implements RockPaperScissorType {
 
@@ -12,24 +12,22 @@ public class Rock implements RockPaperScissorType {
     }
 
     @Override
-    public int scoreAgainst(RockPaperScissorType challenger) {
+    public RoundScore scoreByChallenger(RockPaperScissorType challenger) {
         if (challenger instanceof Rock) {
-            return RockPaperScissorsGame.draw;
+            return RoundScore.Draw;
         } else if (challenger instanceof Paper) {
-            return RockPaperScissorsGame.lose;
+            return RoundScore.Lose;
         } else {
-            return RockPaperScissorsGame.win;
+            return RoundScore.Win;
         }
     }
 
-    //Score should probably be an enum to avoid illegal arguments at compile time
     @Override
-    public RockPaperScissorType deriveChallengerForDesiredScore(int desiredScore) {
+    public RockPaperScissorType challengerByScore(RoundScore desiredScore) {
         return switch (desiredScore) {
-            case RockPaperScissorsGame.lose -> new Paper();
-            case RockPaperScissorsGame.draw -> new Rock();
-            case RockPaperScissorsGame.win -> new Scissor();
-            default -> throw new IllegalArgumentException("Unmapped score");
+            case Lose -> new Paper();
+            case Draw -> new Rock();
+            case Win -> new Scissor();
         };
     }
 }
