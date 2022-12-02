@@ -1,8 +1,10 @@
 package rocker_paper_scissors;
 
+import rocker_paper_scissors.game.RockPaperScissorRound;
+import rocker_paper_scissors.game.RockPaperScissorsGame;
 import rocker_paper_scissors.types.Paper;
-import rocker_paper_scissors.types.RPSType;
 import rocker_paper_scissors.types.Rock;
+import rocker_paper_scissors.types.RockPaperScissorType;
 import rocker_paper_scissors.types.Scissor;
 import shared.FileReaderUtil;
 
@@ -20,41 +22,41 @@ public class Main {
     private static void part1(List<String> input) {
         //Map A -> Rock, B -> Paper, C -> Scissors
         //Map X -> Rock, Y -> Paper, Z -> Scissors
-        List<RPSRound> rpsRounds = inputToRPSRounds(input);
+        List<RockPaperScissorRound> rpsRounds = inputToRPSRounds(input);
 
         System.out.println("Total score:");
         System.out.println(new RockPaperScissorsGame(rpsRounds).calculateMyScore());
     }
 
-    private static List<RPSRound> inputToRPSRounds(List<String> input) {
+    private static List<RockPaperScissorRound> inputToRPSRounds(List<String> input) {
         return input.stream().map(row -> {
             String[] hands = row.split(" ");
             String theirHand = hands[0];
             String myHand = hands[1];
-            return new RPSRound(inputToOption(theirHand), inputToOption(myHand));
+            return new RockPaperScissorRound(inputToOption(theirHand), inputToOption(myHand));
         }).toList();
     }
 
     private static void part2(List<String> input) {
         //Map A -> Rock, B -> Paper, C -> Scissors
         //Map X -> Lose, Y -> Draw, Z -> Win
-        List<RPSRound> rpsRounds = inputToDerivedRPSRounds(input);
+        List<RockPaperScissorRound> rpsRounds = inputToDerivedRPSRounds(input);
 
         System.out.println("Total score:");
         System.out.println(new RockPaperScissorsGame(rpsRounds).calculateMyScore());
     }
 
-    private static List<RPSRound> inputToDerivedRPSRounds(List<String> input) {
+    private static List<RockPaperScissorRound> inputToDerivedRPSRounds(List<String> input) {
         return input.stream().map(row -> {
             String[] hands = row.split(" ");
             String theirHand = hands[0];
             String myResult = hands[1];
-            RPSType theirRPSHand = inputToOption(theirHand);
-            return new RPSRound(theirRPSHand, inputToDerivedOption(theirRPSHand, myResult));
+            RockPaperScissorType theirRPSHand = inputToOption(theirHand);
+            return new RockPaperScissorRound(theirRPSHand, inputToDerivedOption(theirRPSHand, myResult));
         }).toList();
     }
 
-    private static RPSType inputToDerivedOption(RPSType theirHand, String inputResult) {
+    private static RockPaperScissorType inputToDerivedOption(RockPaperScissorType theirHand, String inputResult) {
         //Reversed win/lose since we have theirr hand and want to calculate our results
         return switch (inputResult) {
             case "X" -> theirHand.deriveChallengerForDesiredScore(RockPaperScissorsGame.win);
@@ -64,7 +66,7 @@ public class Main {
         };
     }
 
-    private static RPSType inputToOption(String inputHand) {
+    private static RockPaperScissorType inputToOption(String inputHand) {
         return switch (inputHand) {
             case "A", "X" -> new Rock();
             case "B", "Y" -> new Paper();

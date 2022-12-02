@@ -1,8 +1,8 @@
 package rocker_paper_scissors.types;
 
-import rocker_paper_scissors.RockPaperScissorsGame;
+import rocker_paper_scissors.game.RockPaperScissorsGame;
 
-public class Scissor implements RPSType {
+public class Scissor implements RockPaperScissorType {
 
     private int value = 3;
 
@@ -12,7 +12,7 @@ public class Scissor implements RPSType {
     }
 
     @Override
-    public int scoreAgainst(RPSType challenger) {
+    public int scoreAgainst(RockPaperScissorType challenger) {
         if (challenger instanceof Scissor) {
             return RockPaperScissorsGame.draw;
         } else if (challenger instanceof Rock) {
@@ -23,7 +23,7 @@ public class Scissor implements RPSType {
     }
 
     @Override
-    public RPSType deriveChallengerForDesiredScore(int desiredScore) {
+    public RockPaperScissorType deriveChallengerForDesiredScore(int desiredScore) {
         return switch (desiredScore) {
             case RockPaperScissorsGame.lose -> new Rock();
             case RockPaperScissorsGame.draw -> new Scissor();

@@ -1,4 +1,4 @@
-package rocker_paper_scissors;
+package rocker_paper_scissors.game;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ public class RockPaperScissorsGame {
     public static final int draw = 3;
     public static final int lose = 0;
 
-    private List<RPSRound> rounds;
+    private List<RockPaperScissorRound> rounds;
 
-    public RockPaperScissorsGame(List<RPSRound> rounds) {
+    public RockPaperScissorsGame(List<RockPaperScissorRound> rounds) {
         this.rounds = rounds;
     }
 
@@ -18,7 +18,7 @@ public class RockPaperScissorsGame {
         return rounds.stream().map(round -> calculateRoundScore(round)).reduce(0, (round, total) -> total + round);
     }
 
-    private int calculateRoundScore(RPSRound round) {
+    private int calculateRoundScore(RockPaperScissorRound round) {
         return round.myHand().scoreAgainst(round.theirHand()) + round.myHand().getValue();
     }
 
