@@ -1,10 +1,10 @@
-package rocker_paper_scissors.types;
+package day2.types;
 
-import rocker_paper_scissors.game.RockPaperScissorsGame.RoundScore;
+import day2.game.RockPaperScissorsGame.RoundScore;
 
-public class Paper implements RockPaperScissorType {
+public class Rock implements RockPaperScissorType {
 
-    private int value = 2;
+    private int value = 1;
 
     @Override
     public int getValue() {
@@ -13,9 +13,9 @@ public class Paper implements RockPaperScissorType {
 
     @Override
     public RoundScore scoreByChallenger(RockPaperScissorType challenger) {
-        if (challenger instanceof Paper) {
+        if (challenger instanceof Rock) {
             return RoundScore.Draw;
-        } else if (challenger instanceof Scissor) {
+        } else if (challenger instanceof Paper) {
             return RoundScore.Lose;
         } else {
             return RoundScore.Win;
@@ -25,9 +25,9 @@ public class Paper implements RockPaperScissorType {
     @Override
     public RockPaperScissorType challengerByScore(RoundScore desiredScore) {
         return switch (desiredScore) {
-            case Lose -> new Scissor();
-            case Draw -> new Paper();
-            case Win -> new Rock();
+            case Lose -> new Paper();
+            case Draw -> new Rock();
+            case Win -> new Scissor();
         };
     }
 }

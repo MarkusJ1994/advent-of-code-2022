@@ -1,6 +1,6 @@
-package rocker_paper_scissors.types;
+package day2.types;
 
-import rocker_paper_scissors.game.RockPaperScissorsGame.RoundScore;
+import day2.game.RockPaperScissorsGame.RoundScore;
 
 public interface RockPaperScissorType {
 

@@ -1,12 +1,12 @@
-package rocker_paper_scissors;
+package day2;
 
-import rocker_paper_scissors.game.RockPaperScissorRound;
-import rocker_paper_scissors.game.RockPaperScissorsGame;
-import rocker_paper_scissors.game.RockPaperScissorsGame.RoundScore;
-import rocker_paper_scissors.types.Paper;
-import rocker_paper_scissors.types.Rock;
-import rocker_paper_scissors.types.RockPaperScissorType;
-import rocker_paper_scissors.types.Scissor;
+import day2.game.RockPaperScissorRound;
+import day2.game.RockPaperScissorsGame;
+import day2.game.RockPaperScissorsGame.RoundScore;
+import day2.types.Paper;
+import day2.types.Rock;
+import day2.types.RockPaperScissorType;
+import day2.types.Scissor;
 import shared.FileReaderUtil;
 
 import java.util.List;

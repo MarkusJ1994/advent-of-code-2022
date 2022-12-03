@@ -1,6 +1,6 @@
-package rocker_paper_scissors.game;
+package day2.game;
 
-import rocker_paper_scissors.types.RockPaperScissorType;
+import day2.types.RockPaperScissorType;
 
 public record RockPaperScissorRound(RockPaperScissorType theirHand, RockPaperScissorType myHand) {
 

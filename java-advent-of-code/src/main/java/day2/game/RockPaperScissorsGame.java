@@ -1,4 +1,4 @@
-package rocker_paper_scissors.game;
+package day2.game;
 
 import java.util.List;
 

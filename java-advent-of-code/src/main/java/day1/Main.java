@@ -1,4 +1,4 @@
-package calorie_counting;
+package day1;
 
 import shared.FileReaderUtil;
 
