@@ -5,6 +5,10 @@ import shared.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The checkDirectionXY functions can definitely be combined with the distanceToBlockingTree function to unified function.
+ * But I already spent too long time on this to bother :D
+ */
 public class TreeGrid {
 
     private final Tree[][] grid;
@@ -29,8 +33,6 @@ public class TreeGrid {
             }
         }
 
-        System.out.println(String.format("Dimensions are [%d][%d]", height, width));
-
         return new TreeGrid(trees);
     }
 
@@ -44,8 +46,6 @@ public class TreeGrid {
                     grid[y][x].setVisible(checkXDirection(y, x) || checkYDirection(y, x));
                 }
                 grid[y][x].setChecked(true);
-//                printVisibilityMap();
-//                System.out.println();
             }
         }
     }
@@ -55,14 +55,8 @@ public class TreeGrid {
     }
 
     protected boolean checkXDirection(int y, int x) {
-//        printVisibilityMap();
-//        System.out.println(String.format("[%d][%d]", y, x));
-//        System.out.println(Arrays.stream(grid[y]).limit(x).map(t -> t.getHeight()).toList());
-//        System.out.println(Arrays.stream(grid[y]).skip(x + 1).map(t -> t.getHeight()).toList());
         int leftMax = Arrays.stream(grid[y]).limit(x).mapToInt(t -> t.getHeight()).max().orElse(0);
         int rightMax = Arrays.stream(grid[y]).skip(x + 1).mapToInt(t -> t.getHeight()).max().orElse(0);
-
-//        System.out.println(String.format("leftMax = %d, rightMax = %d", leftMax, rightMax));
 
         int heightToBeat = Math.min(leftMax, rightMax);
 
@@ -70,13 +64,8 @@ public class TreeGrid {
     }
 
     protected boolean checkYDirection(int y, int x) {
-//        System.out.println(String.format("[%d][%d]", y, x));
-//        System.out.println(Arrays.stream(grid).map(g -> g[x]).limit(y).map(t -> t.getHeight()).toList());
-//        System.out.println(Arrays.stream(grid).map(g -> g[x]).skip(y + 1).map(t -> t.getHeight()).toList());
         int leftMax = Arrays.stream(grid).map(g -> g[x]).limit(y).mapToInt(t -> t.getHeight()).max().orElse(0);
         int rightMax = Arrays.stream(grid).map(g -> g[x]).skip(y + 1).mapToInt(t -> t.getHeight()).max().orElse(0);
-
-//        System.out.println(String.format("leftMax = %d, rightMax = %d", leftMax, rightMax));
 
         int heightToBeat = Math.min(leftMax, rightMax);
 
@@ -102,7 +91,7 @@ public class TreeGrid {
         return bestScenicScore.getValue();
     }
 
-    public void calculateScenicScoreMap(Map<Pair<Integer, Integer>, Integer> coordinateToScore) {
+    private void calculateScenicScoreMap(Map<Pair<Integer, Integer>, Integer> coordinateToScore) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int up = distanceToBlockingTree(y, x, Direction.UP);
@@ -116,15 +105,16 @@ public class TreeGrid {
     }
 
     private int distanceToBlockingTree(int y, int x, Direction dir) {
+        int referenceTreeHeight = grid[y][x].getHeight();
         int count = 0;
         switch (dir) {
             case UP -> {
                 int goingUp = --y;
                 Tree tree;
-                while (y >= 0) {
+                while (goingUp >= 0) {
                     tree = grid[goingUp][x];
                     count++;
-                    if (tree.isVisible()) {
+                    if (tree.getHeight() >= referenceTreeHeight) {
                         break;
                     }
                     goingUp--;
@@ -133,10 +123,10 @@ public class TreeGrid {
             case DOWN -> {
                 int goingDown = ++y;
                 Tree tree;
-                while (y < height) {
+                while (goingDown < height) {
                     tree = grid[goingDown][x];
                     count++;
-                    if (tree.isVisible()) {
+                    if (tree.getHeight() >= referenceTreeHeight) {
                         break;
                     }
                     goingDown++;
@@ -145,10 +135,10 @@ public class TreeGrid {
             case LEFT -> {
                 int goingLeft = --x;
                 Tree tree;
-                while (x >= 0) {
+                while (goingLeft >= 0) {
                     count++;
                     tree = grid[y][goingLeft];
-                    if (tree.isVisible()) {
+                    if (tree.getHeight() >= referenceTreeHeight) {
                         break;
                     }
                     goingLeft--;
@@ -157,10 +147,10 @@ public class TreeGrid {
             case RIGHT -> {
                 int goingRight = ++x;
                 Tree tree;
-                while (x < width) {
+                while (goingRight < width) {
                     count++;
                     tree = grid[y][goingRight];
-                    if (tree.isVisible()) {
+                    if (tree.getHeight() >= referenceTreeHeight) {
                         break;
                     }
                     goingRight++;
