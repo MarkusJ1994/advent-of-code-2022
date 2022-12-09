@@ -39,33 +39,33 @@ class RopeGridTest {
     void calculateDistanceBetweenPoints() {
 
         assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Coordinate(0, 1),
-                new Coordinate(0, 0)
+                new Knot(0, 1),
+                new Knot(0, 0)
         )));
 
         assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Coordinate(1, 1),
-                new Coordinate(2, 2)
+                new Knot(1, 1),
+                new Knot(2, 2)
         )));
 
         assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Coordinate(0, 0),
-                new Coordinate(0, 0)
+                new Knot(0, 0),
+                new Knot(0, 0)
         )));
 
         assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Coordinate(1, 1),
-                new Coordinate(1, 2)
+                new Knot(1, 1),
+                new Knot(1, 2)
         )));
 
         assertFalse((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Coordinate(0, 0),
-                new Coordinate(2, 2)
+                new Knot(0, 0),
+                new Knot(2, 2)
         )));
 
         assertFalse((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Coordinate(0, 0),
-                new Coordinate(0, 2)
+                new Knot(0, 0),
+                new Knot(0, 2)
         )));
 
     }
@@ -85,34 +85,38 @@ class RopeGridTest {
 
     @Test
     void testRopeGridPart2() {
-        RopeGrid ropeGrid = new RopeGrid(List.of("R 5"), 9);
+//        RopeGrid ropeGrid = new RopeGrid(List.of("R 5"), 9);
+//
+//        ropeGrid.traverseCommands();
+//
+//        ropeGrid.printSnake();
+//        ropeGrid.printTail();
+//
+//        assertEquals(0, ropeGrid.getNumberOfCoordinatesVisitedByTail());
+//
+//        ropeGrid = new RopeGrid(List.of("R 5", "U 8"), 9);
+//
+//        ropeGrid.traverseCommands();
+//
+//        ropeGrid.printSnake();
+//        ropeGrid.printTail();
+//
+//        assertEquals(0, ropeGrid.getNumberOfCoordinatesVisitedByTail());
+//
+//        ropeGrid = new RopeGrid(List.of("R 5", "U 8", "L 8"), 9);
+//
+//        ropeGrid.traverseCommands();
+//
+//        ropeGrid.printSnake();
+//        ropeGrid.printTail();
+//
+//        assertEquals(0, ropeGrid.getNumberOfCoordinatesVisitedByTail());
+
+        RopeGrid ropeGrid = new RopeGrid(testDataPart2, 9);
 
         ropeGrid.traverseCommands();
 
-        ropeGrid.printSnake();
-        ropeGrid.printTail();
-
-        assertEquals(0, ropeGrid.getNumberOfCoordinatesVisitedByTail());
-
-        ropeGrid = new RopeGrid(List.of("R 5", "U 8"), 9);
-
-        ropeGrid.traverseCommands();
-
-        ropeGrid.printSnake();
-        ropeGrid.printTail();
-
-        assertEquals(0, ropeGrid.getNumberOfCoordinatesVisitedByTail());
-
-        ropeGrid = new RopeGrid(List.of("R 5", "U 8", "L 8"), 9);
-
-        ropeGrid.traverseCommands();
-
-        ropeGrid.printSnake();
-        ropeGrid.printTail();
-
-        assertEquals(0, ropeGrid.getNumberOfCoordinatesVisitedByTail());
-
-//        assertEquals(36, ropeGrid.getNumberOfCoordinatesVisitedByTail());
+        assertEquals(36, ropeGrid.getNumberOfCoordinatesVisitedByTail());
     }
 
 }

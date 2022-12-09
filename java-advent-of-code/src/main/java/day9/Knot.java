@@ -2,11 +2,14 @@ package day9;
 
 import java.util.Objects;
 
-public class Coordinate {
+public class Knot {
 
     private int x, y;
 
-    public Coordinate(int x, int y) {
+    private Knot parent;
+    private Knot child;
+
+    public Knot(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -27,11 +30,11 @@ public class Coordinate {
         this.y = y;
     }
 
-    public int calculateYDistance(Coordinate other) {
+    public int calculateYDistance(Knot other) {
         return Math.abs(y - other.y);
     }
 
-    public int calculateXDistance(Coordinate other) {
+    public int calculateXDistance(Knot other) {
         return Math.abs(x - other.x);
     }
 
@@ -39,7 +42,7 @@ public class Coordinate {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Coordinate that = (Coordinate) o;
+        Knot that = (Knot) o;
         return x == that.x && y == that.y;
     }
 
@@ -54,5 +57,21 @@ public class Coordinate {
                 x +
                 ", y=" + y +
                 ']';
+    }
+
+    public Knot getChild() {
+        return child;
+    }
+
+    public void setChild(Knot child) {
+        this.child = child;
+    }
+
+    public Knot getParent() {
+        return parent;
+    }
+
+    public void setParent(Knot parent) {
+        this.parent = parent;
     }
 }
