@@ -51,12 +51,12 @@ public class TreeGrid {
     }
 
     protected boolean checkAllDirections(int y, int x) {
-        int left = distanceToBlockingTree(y, x, Direction.LEFT);
-        int right = distanceToBlockingTree(y, x, Direction.RIGHT);
-        int up = distanceToBlockingTree(y, x, Direction.UP);
-        int down = distanceToBlockingTree(y, x, Direction.DOWN);
+        boolean leftBlocking = distanceToBlockingTree(y, x, Direction.LEFT).b();
+        boolean rightBlocking = distanceToBlockingTree(y, x, Direction.RIGHT).b();
+        boolean upBlocking = distanceToBlockingTree(y, x, Direction.UP).b();
+        boolean downBlocking = distanceToBlockingTree(y, x, Direction.DOWN).b();
 
-        return left == -1 || right == -1 || up == -1 || down == -1;
+        return !(leftBlocking && rightBlocking && upBlocking && downBlocking);
     }
 
     public int calculateVisibleTrees() {
@@ -81,17 +81,18 @@ public class TreeGrid {
     private void calculateScenicScoreMap(Map<Pair<Integer, Integer>, Integer> coordinateToScore) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                int up = distanceToBlockingTree(y, x, Direction.UP);
-                int down = distanceToBlockingTree(y, x, Direction.DOWN);
-                int left = distanceToBlockingTree(y, x, Direction.LEFT);
-                int right = distanceToBlockingTree(y, x, Direction.RIGHT);
+                int up = distanceToBlockingTree(y, x, Direction.UP).a();
+                int down = distanceToBlockingTree(y, x, Direction.DOWN).a();
+                int left = distanceToBlockingTree(y, x, Direction.LEFT).a();
+                int right = distanceToBlockingTree(y, x, Direction.RIGHT).a();
 
                 coordinateToScore.put(new Pair<>(y, x), up * down * left * right);
             }
         }
     }
 
-    private int distanceToBlockingTree(int y, int x, Direction dir) {
+    private Pair<Integer, Boolean> distanceToBlockingTree(int y, int x, Direction dir) {
+        boolean blockingTreeFound = false;
         int referenceTreeHeight = grid[y][x].getHeight();
         int count = 0;
         switch (dir) {
@@ -102,7 +103,8 @@ public class TreeGrid {
                     tree = grid[goingUp][x];
                     count++;
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        return count;
+                        blockingTreeFound = true;
+                        break;
                     }
                     goingUp--;
                 }
@@ -114,7 +116,8 @@ public class TreeGrid {
                     tree = grid[goingDown][x];
                     count++;
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        return count;
+                        blockingTreeFound = true;
+                        break;
                     }
                     goingDown++;
                 }
@@ -126,7 +129,8 @@ public class TreeGrid {
                     count++;
                     tree = grid[y][goingLeft];
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        return count;
+                        blockingTreeFound = true;
+                        break;
                     }
                     goingLeft--;
                 }
@@ -138,14 +142,14 @@ public class TreeGrid {
                     count++;
                     tree = grid[y][goingRight];
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        return count;
+                        blockingTreeFound = true;
+                        break;
                     }
                     goingRight++;
                 }
             }
         }
-        //No blocking tree found, signal by -1
-        return -1;
+        return new Pair<>(count, blockingTreeFound);
     }
 
     public int getHeight() {
