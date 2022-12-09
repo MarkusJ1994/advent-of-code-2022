@@ -41,11 +41,11 @@ class TreeGridTest {
     void testXDirectionVisibility() {
         TreeGrid treeGrid = TreeGrid.constructTreeGrid(List.of("30373"));
 
-        boolean zeroElem = treeGrid.checkXDirection(0, 1);
+        boolean zeroElem = treeGrid.checkAllDirections(0, 1);
 
         assertFalse(zeroElem);
 
-        boolean sevenElem = treeGrid.checkXDirection(0, 3);
+        boolean sevenElem = treeGrid.checkAllDirections(0, 3);
 
         assertTrue(sevenElem);
     }

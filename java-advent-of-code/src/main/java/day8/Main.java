@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         List<String> input = new FileReaderUtil().readFile("day8_trees.txt");
-        part2(input);
+        part1(input);
     }
 
     private static void part1(List<String> input) {

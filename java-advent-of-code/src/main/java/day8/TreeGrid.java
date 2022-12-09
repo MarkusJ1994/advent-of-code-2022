@@ -5,10 +5,6 @@ import shared.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * The checkDirectionXY functions can definitely be combined with the distanceToBlockingTree function to unified function.
- * But I already spent too long time on this to bother :D
- */
 public class TreeGrid {
 
     private final Tree[][] grid;
@@ -43,7 +39,7 @@ public class TreeGrid {
                 if (isOuterRow(y, x)) {
                     grid[y][x].setVisible(true);
                 } else {
-                    grid[y][x].setVisible(checkXDirection(y, x) || checkYDirection(y, x));
+                    grid[y][x].setVisible(checkAllDirections(y, x));
                 }
                 grid[y][x].setChecked(true);
             }
@@ -54,22 +50,13 @@ public class TreeGrid {
         return y == 0 || x == 0 || y == (getHeight() - 1) || x == (getWidth() - 1);
     }
 
-    protected boolean checkXDirection(int y, int x) {
-        int leftMax = Arrays.stream(grid[y]).limit(x).mapToInt(t -> t.getHeight()).max().orElse(0);
-        int rightMax = Arrays.stream(grid[y]).skip(x + 1).mapToInt(t -> t.getHeight()).max().orElse(0);
+    protected boolean checkAllDirections(int y, int x) {
+        int left = distanceToBlockingTree(y, x, Direction.LEFT);
+        int right = distanceToBlockingTree(y, x, Direction.RIGHT);
+        int up = distanceToBlockingTree(y, x, Direction.UP);
+        int down = distanceToBlockingTree(y, x, Direction.DOWN);
 
-        int heightToBeat = Math.min(leftMax, rightMax);
-
-        return grid[y][x].getHeight() > heightToBeat;
-    }
-
-    protected boolean checkYDirection(int y, int x) {
-        int leftMax = Arrays.stream(grid).map(g -> g[x]).limit(y).mapToInt(t -> t.getHeight()).max().orElse(0);
-        int rightMax = Arrays.stream(grid).map(g -> g[x]).skip(y + 1).mapToInt(t -> t.getHeight()).max().orElse(0);
-
-        int heightToBeat = Math.min(leftMax, rightMax);
-
-        return grid[y][x].getHeight() > heightToBeat;
+        return left == -1 || right == -1 || up == -1 || down == -1;
     }
 
     public int calculateVisibleTrees() {
@@ -115,7 +102,7 @@ public class TreeGrid {
                     tree = grid[goingUp][x];
                     count++;
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        break;
+                        return count;
                     }
                     goingUp--;
                 }
@@ -127,7 +114,7 @@ public class TreeGrid {
                     tree = grid[goingDown][x];
                     count++;
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        break;
+                        return count;
                     }
                     goingDown++;
                 }
@@ -139,7 +126,7 @@ public class TreeGrid {
                     count++;
                     tree = grid[y][goingLeft];
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        break;
+                        return count;
                     }
                     goingLeft--;
                 }
@@ -151,13 +138,14 @@ public class TreeGrid {
                     count++;
                     tree = grid[y][goingRight];
                     if (tree.getHeight() >= referenceTreeHeight) {
-                        break;
+                        return count;
                     }
                     goingRight++;
                 }
             }
         }
-        return count;
+        //No blocking tree found, signal by -1
+        return -1;
     }
 
     public int getHeight() {
