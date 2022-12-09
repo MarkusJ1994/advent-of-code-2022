@@ -39,26 +39,26 @@ class TreeGridTest {
 
     @Test
     void testXDirectionVisibility() {
-        TreeGrid treeGrid = TreeGrid.constructTreeGrid(List.of("30373"));
+        TreeGrid treeGrid = TreeGrid.constructTreeGrid(List.of("99999", "30373", "99999"));
 
-        boolean zeroElem = treeGrid.checkAllDirections(0, 1);
+        boolean zeroElem = treeGrid.checkAllDirections(1, 1);
 
         assertFalse(zeroElem);
 
-        boolean sevenElem = treeGrid.checkAllDirections(0, 3);
+        boolean sevenElem = treeGrid.checkAllDirections(1, 3);
 
         assertTrue(sevenElem);
     }
 
     @Test
     void testYDirectionVisibility() {
-        TreeGrid treeGrid = TreeGrid.constructTreeGrid(List.of("3", "0", "3", "7", "3"));
+        TreeGrid treeGrid = TreeGrid.constructTreeGrid(List.of("939", "909", "939", "979", "939"));
 
-        boolean zeroElem = treeGrid.checkYDirection(1, 0);
+        boolean zeroElem = treeGrid.checkAllDirections(1, 1);
 
         assertFalse(zeroElem);
 
-        boolean sevenElem = treeGrid.checkYDirection(3, 0);
+        boolean sevenElem = treeGrid.checkAllDirections(3, 1);
 
         assertTrue(sevenElem);
     }
