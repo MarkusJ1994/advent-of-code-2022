@@ -2,29 +2,29 @@ package day9;
 
 import day9.DirectionUtil.Direction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Stack;
 
 public class RopeGrid {
     private final List<String> commands;
 
     private final int tailLength;
     private final Stack<Knot> visitedCoordinatesTail = new Stack<>();
-
-    private final LinkedList<Knot> snake = new LinkedList<>();
-    private Knot headKnot;
+    private final List<Knot> snake = new ArrayList<>();
+    private Knot headKnot = new Knot(0, 0);
 
     public RopeGrid(List<String> commands, int tailLength) {
         this.commands = commands;
         this.tailLength = tailLength;
-        //Start positions
-        headKnot = new Knot(0, 0);
-        snake.addFirst(headKnot);
-    }
-
-    protected static boolean distanceBetweenPointsIsOneStepOrLess(Knot c1, Knot c2) {
-        int xDiff = Math.abs(c1.x() - c2.x());
-        int yDiff = Math.abs(c1.y() - c2.y());
-        return xDiff <= 1 && yDiff <= 1;
+        snake.add(headKnot);
+        for (int i = 0; i < tailLength; i++) {
+            Knot knot = new Knot(0, 0);
+            snake.get(i).setChild(knot);
+            knot.setParent(snake.get(i));
+            snake.add(knot);
+        }
     }
 
     protected int getNumberOfCoordinatesVisitedByTail() {
@@ -40,93 +40,55 @@ public class RopeGrid {
         });
     }
 
-    private void updateKnot(Knot knot, Direction direction) {
-        if (knot.getParent() != null) {
-            System.out.println("a1:" + knot);
-            int currentX = knot.x();
-            int currentY = knot.y();
+    private void updateTailKnot(Knot knot) {
+        //tail knots
+        int currentX = knot.x();
+        int currentY = knot.y();
 
-            int draggingX = knot.getParent().x();
-            int draggingY = knot.getParent().y();
+        int headX = knot.getParent().x();
+        int headY = knot.getParent().y();
 
-            int deltaX = Math.abs(draggingX - currentX);
-            int deltaY = Math.abs(draggingY - currentY);
+        int deltaX = Math.abs(headX - currentX);
+        int deltaY = Math.abs(headY - currentY);
 
-            if (deltaX > 1 || deltaY > 1) {
-                System.out.println("p:" + knot.getParent());
-                //4 - (1 * 0) = 4
-                //-2 - (-1 * -1) = -3
-
-                //3 - 33
-                //0 + 0 * 0 = 0
-                knot.setX(draggingX - ((deltaX - 1) * direction.getXDelta()));
-                knot.setY(draggingY - ((deltaY - 1) * direction.getYDelta()));
-
-                System.out.printf("draggingX=%d, draggingY=%d, deltaX=%d, deltaY=%d, dirX=%d, dirY=%d",
-                        draggingX, draggingY, deltaX, deltaY, direction.getXDelta(), direction.getYDelta());
-
-                System.out.println();
-                System.out.println("a2: " + knot);
-            }
-        } else {
-            knot.setX(knot.x() + direction.getXDelta());
-            knot.setY(knot.y() + direction.getYDelta());
+        if (deltaX == 2 && deltaY == 1) {
+            knot.setX(currentX + (currentX - headX) / -2);
+            knot.setY(currentY + (currentY - headY) * -1);
+        } else if (deltaY == 2 && deltaX == 1) {
+            knot.setX(currentX + (currentX - headX) * -1);
+            knot.setY(currentY + (currentY - headY) / -2);
+        } else if (deltaX == 2 && deltaY == 2) {
+            knot.setX(currentX + (currentX - headX) / -2);
+            knot.setY(currentY + (currentY - headY) / -2);
+        } else if (deltaY == 2 && deltaX == 0) {
+            knot.setY(currentY + (currentY - headY) / -2);
+        } else if (deltaX == 2 && deltaY == 0) {
+            knot.setX(currentX + (currentX - headX) / -2);
         }
     }
 
-    private void dragKnotBehind(Knot draggingKnot, Direction direction) {
-        printSnake();
-        printTail();
-        System.out.println();
-        if (draggingKnot == null) {
-            return;
-        }
-
-        Knot previousKnot = new Knot(draggingKnot.x(), draggingKnot.y());
-
-        updateKnot(draggingKnot, direction);
+    private void dragKnotBehind(Knot draggingKnot) {
+        updateTailKnot(draggingKnot);
 
         Knot followingKnot = draggingKnot.getChild();
 
-        if (followingKnot == null) {
-            if (snake.size() < (tailLength + 1)) {
-                followingKnot = previousKnot;
-                followingKnot.setParent(draggingKnot);
-                draggingKnot.setChild(followingKnot);
-                snake.addLast(followingKnot);
-            }
-        } else {
-            dragKnotBehind(followingKnot, direction);
+        if (followingKnot != null) {
+            dragKnotBehind(followingKnot);
         }
     }
 
     private void executeLine(Direction direction, int steps) {
         for (int i = steps; i > 0; i--) {
-            dragKnotBehind(headKnot, direction);
-
-            if (snake.size() > tailLength) {
-                printSnake();
-                visitedCoordinatesTail.add(new Knot(snake.getLast().x(), snake.getLast().y()));
-                printTail();
-            }
-//            if (snake.size() > (tailLength + 1)) {
-//                Knot lastTailNode = snake.removeLast();
-//                System.out.println(snake.size());
-//                System.out.println(String.format("Adding %s to the last tail visit stack", snake.peekLast()));
-//                visitedCoordinatesTail.add(lastTailNode);
-//            }
-
-//            printStep();
+            headKnot.setX(headKnot.x() + direction.getXDelta());
+            headKnot.setY(headKnot.y() + direction.getYDelta());
+            dragKnotBehind(headKnot.getChild());
+            printSnake();
+            visitedCoordinatesTail.add(new Knot(snake.get(snake.size() - 1).x(), snake.get(snake.size() - 1).y()));
         }
     }
 
     public Stack<Knot> getVisitedCoordinatesTail() {
         return visitedCoordinatesTail;
-    }
-
-    protected void printStep() {
-        System.out.println("Tail:" + visitedCoordinatesTail.peek());
-        System.out.println();
     }
 
     protected void printSnake() {

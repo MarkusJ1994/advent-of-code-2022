@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RopeGridTest {
 
@@ -34,41 +34,6 @@ class RopeGridTest {
      * 1,0  1,1  1,2
      * 2,0  2,1  2,2
      */
-
-    @Test
-    void calculateDistanceBetweenPoints() {
-
-        assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Knot(0, 1),
-                new Knot(0, 0)
-        )));
-
-        assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Knot(1, 1),
-                new Knot(2, 2)
-        )));
-
-        assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Knot(0, 0),
-                new Knot(0, 0)
-        )));
-
-        assertTrue((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Knot(1, 1),
-                new Knot(1, 2)
-        )));
-
-        assertFalse((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Knot(0, 0),
-                new Knot(2, 2)
-        )));
-
-        assertFalse((RopeGrid.distanceBetweenPointsIsOneStepOrLess(
-                new Knot(0, 0),
-                new Knot(0, 2)
-        )));
-
-    }
 
     @Test
     void testRopeGridPart1() {
