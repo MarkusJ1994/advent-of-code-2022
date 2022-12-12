@@ -5,41 +5,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class Monkey {
 
     private final int index;
-    private final Function<Integer, Integer> operation;
-    private final Predicate<Integer> test;
+    private final Function<Long, Long> operation;
+    private final int divider;
     private final int trueIndex;
     private final int falseIndex;
-    private final int boredomDivider = 3;
-    private Queue<Integer> items;
+    private final Queue<Long> items;
     private int inspectCount = 0;
 
-    public Monkey(int index, List<Integer> items, Function<Integer, Integer> operation, Predicate<Integer> test, int trueIndex, int falseIndex) {
+    public Monkey(int index, List<Integer> items, Function<Long, Long> operation, int divider, int trueIndex, int falseIndex) {
         this.index = index;
-        this.items = new ArrayDeque<>(items);
+        this.items = new ArrayDeque<>(items.stream().map(Long::valueOf).toList());
         this.operation = operation;
-        this.test = test;
+        this.divider = divider;
         this.trueIndex = trueIndex;
         this.falseIndex = falseIndex;
     }
 
-    public int getIndex() {
-        return index;
+    protected Long mod(Long item) {
+        return item % divider;
     }
 
-    protected void performRound(Map<Integer, Monkey> monkeys) {
+    protected void performRound(Map<Integer, Monkey> monkeys, int lcmMod, int boredomDivisor) {
         //Grab item to inspect
         while (items.peek() != null) {
-            int itemToInspect = items.poll();
-            System.out.println(String.format("Performing round for monkey %d and item %d", index, itemToInspect));
+            Long itemToInspect = items.poll();
             //Apply modifier operation and boredom divider
-            int processedItem = operation.apply(itemToInspect) / boredomDivider;
+            long processedItem = operation.apply(itemToInspect) / boredomDivisor;
+            if (lcmMod > 0) {
+                processedItem = processedItem % lcmMod;
+            }
             //Test worry level
-            if (test.test(processedItem)) {
+            if (mod(processedItem) == 0) {
                 //Throw to true result monkey
                 monkeys.get(trueIndex).throwItem(processedItem);
             } else {
@@ -50,8 +50,16 @@ public class Monkey {
         }
     }
 
-    protected void throwItem(Integer item) {
+    protected void throwItem(Long item) {
         items.add(item);
+    }
+
+    protected int getIndex() {
+        return index;
+    }
+
+    protected int getDivider() {
+        return divider;
     }
 
     protected int getInspectCount() {
